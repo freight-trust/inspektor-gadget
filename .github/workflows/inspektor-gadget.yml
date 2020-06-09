@@ -73,6 +73,10 @@ jobs:
         export IMAGE_TAG=${{steps.publish-registry.outputs.snapshot-tag}}
         echo "Using IMAGE_TAG=$IMAGE_TAG"
 
+        sudo apt-get install linux-headers-$(uname -r)
+        ls -l /lib/modules/5.3.0-1020-azure/ || true
+        ls -l /lib/modules/5.3.0-1020-azure/build || true
+        dpkg -L linux-headers-$(uname -r) || true
         make -C integration build push
 
         TESTS_DOCKER_ARGS="-e KUBECONFIG=/root/.kube/config -v /home/runner/.kube:/root/.kube -v /home/runner/work/_temp/.minikube:/home/runner/work/_temp/.minikube" \
